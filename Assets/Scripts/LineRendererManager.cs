@@ -21,17 +21,28 @@ public class LineRendererManager : Singleton<LineRendererManager>
 
 	public void UpdateDots(Vector3 position, bool active)
 	{
-		m_lineRenderer = GetComponent<LineRenderer>();
-
 		if(active)
 		{
 			m_dotsQueue.Enqueue(position);
+			DrawLines();
+		}
+		else
+		{
+			m_dotsQueue.Dequeue();
+		}
+	}
 
-			Debug.Log("Set Line Active for pos: " + position);
-			Vector3[] positions = m_dotsQueue.ToArray();
-			for(int i = 0 ; i < positions.GetLength(0) ; i++)
+	public void DrawLines(){
+		Vector3[] positions = m_dotsQueue.ToArray();
+		for(int i = 0 ; i < 100 ; i++)
+		{
+			if(i < m_dotsQueue.Count)
 			{
 				m_lineRenderer.SetPosition(i, positions[i]);
+			}
+			else
+			{
+				m_lineRenderer.SetPosition(i, Vector3.zero);
 			}
 		}
 	}

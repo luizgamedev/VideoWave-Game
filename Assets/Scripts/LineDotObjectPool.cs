@@ -7,6 +7,8 @@ public class LineDotObjectPool : ObjectPool
 
 	public int m_poolSize;
 
+	public float m_releaseDotsTime = 0.2f;
+
 	public override void Start()
 	{
 
@@ -24,7 +26,7 @@ public class LineDotObjectPool : ObjectPool
 			lineObj.GetComponent<LineDot>().SetLineActive(false);
 		}
 
-		InvokeRepeating("DebugLines", 1f, 0.2f );
+		InvokeRepeating("DebugLines", 1f, m_releaseDotsTime );
 	}
 
 	void DebugLines()
@@ -36,14 +38,19 @@ public class LineDotObjectPool : ObjectPool
 	{
 		LineDot lineDot = m_poolOfObjects[m_poolIndex].GetComponent<LineDot>();
 
-		lineDot.SetLineActive(true);
-
 		base.ReleaseObject();
 
-		//Debug.Log("Set Line Active for pos: " + lineDot.transform.position);
+		//Debug Line
+		m_poolOfObjects[m_poolIndex].transform.localPosition = new Vector3(m_initialLocalX, Random.Range(-15, 15f), m_initialLocalZ);
 
 		LineRendererManager.Instance.UpdateDots(lineDot.transform.position, true);
 
+	}
+
+	public override void DeactivateObject(GameObject gameObj)
+	{
+		LineRendererManager.Instance.UpdateDots(gameObj.transform.position, false);
+		base.DeactivateObject(gameObj);
 	}
 
 	

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class ObjectPool : MonoBehaviour {
 
@@ -22,12 +23,14 @@ public class ObjectPool : MonoBehaviour {
 
 	protected int m_poolIndex = 0;
 
+	Camera m_mainCam;
+
 	public virtual void Start()
 	{
 		foreach(GameObject obj in m_poolOfObjects)
 		{
-			Camera mainCam = Camera.main;
-			obj.transform.SetParent(mainCam.transform);
+			m_mainCam = Camera.main;
+			obj.transform.SetParent(m_mainCam.transform);
 			obj.transform.localPosition = new Vector3(m_relativeCameraPositionX, 0f, m_relativeCameraPositionZ);
 		}
 	}
@@ -40,10 +43,18 @@ public class ObjectPool : MonoBehaviour {
 		
 		//Debug Line
 		m_poolOfObjects[m_poolIndex].transform.localPosition = new Vector3(m_initialLocalX, Random.Range(-15, 15f), m_initialLocalZ);
+
 		m_poolOfObjects[m_poolIndex].transform.SetParent(null);
 
 		m_poolIndex = (m_poolIndex + 1) % m_poolOfObjects.Count;
+	}
+
+	public virtual void DeactivateObject(GameObject gameObj)
+	{
 		
+		gameObj.transform.SetParent(m_mainCam.transform);
+		gameObj.transform.localPosition = new Vector3(m_initialLocalX, Random.Range(-15, 15f), m_initialLocalZ);
+		gameObj.SetActive(false);
 	}
 
 
