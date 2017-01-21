@@ -23,6 +23,14 @@ public class ObjectPool : MonoBehaviour {
 
 	protected int m_poolIndex = 0;
 
+	private float m_lastYposition = 0f;
+
+	private int m_numberOfPointAtSameSide = 1;
+
+	private bool m_positiveMove = true;
+
+	private float m_maxMove = 10f;
+
 	Camera m_mainCam;
 
 	public virtual void Start()
@@ -41,8 +49,29 @@ public class ObjectPool : MonoBehaviour {
 	{
 		m_poolOfObjects[m_poolIndex].SetActive(true);
 		
+		int randomNumber = Random.Range(1,1000);
+
+		if(m_numberOfPointAtSameSide < 3)
+		{
+			m_numberOfPointAtSameSide++;
+			m_lastYposition =  m_lastYposition + (Random.Range(1f, m_maxMove) * (m_positiveMove ? 1 : -1) );
+		}
+		else if(randomNumber < m_numberOfPointAtSameSide)
+		{
+			m_numberOfPointAtSameSide++;
+			m_lastYposition =  m_lastYposition + (Random.Range(1f, m_maxMove) * (m_positiveMove ? 1 : -1) );
+		}
+		else
+		{
+			m_numberOfPointAtSameSide = 1;
+			m_positiveMove = !m_positiveMove;
+			m_lastYposition =  m_lastYposition + (Random.Range(1f, m_maxMove) * (m_positiveMove ? 1 : -1));
+		}
+
+		m_lastYposition = Mathf.Clamp(m_lastYposition, -50f, 50f);
+
 		//Debug Line
-		m_poolOfObjects[m_poolIndex].transform.localPosition = new Vector3(m_initialLocalX, Random.Range(-15, 15f), m_initialLocalZ);
+		m_poolOfObjects[m_poolIndex].transform.localPosition = new Vector3(m_initialLocalX, m_lastYposition, m_initialLocalZ);
 
 		m_poolOfObjects[m_poolIndex].transform.SetParent(null);
 
@@ -53,7 +82,10 @@ public class ObjectPool : MonoBehaviour {
 	{
 		
 		gameObj.transform.SetParent(m_mainCam.transform);
-		gameObj.transform.localPosition = new Vector3(m_initialLocalX, Random.Range(-15, 15f), m_initialLocalZ);
+
+		
+
+		gameObj.transform.localPosition = new Vector3(m_initialLocalX, 0f, m_initialLocalZ);
 		gameObj.SetActive(false);
 	}
 
