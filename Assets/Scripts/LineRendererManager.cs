@@ -14,8 +14,11 @@ public class LineRendererManager : Singleton<LineRendererManager>
 	void Start()
 	{
 		m_lineRenderer = GetComponent<LineRenderer>();
+
 		GameEventManager.GameStart += OnStart;
+
 		OnStart();
+
 	}
 
 	void OnStart()

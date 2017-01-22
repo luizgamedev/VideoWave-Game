@@ -7,14 +7,19 @@ public class Pause : MonoBehaviour {
 	private ShowPanels showPanels;						//Reference to the ShowPanels script used to hide and show UI panels
 	private bool isPaused;								//Boolean to check if the game is paused or not
 	private StartOptions startScript;					//Reference to the StartButton script
-	
+	UIManager uiManager;
+	VHSEffect vhsEffect;
+	public Camera camera; 
+
 	//Awake is called before Start()
 	void Awake()
 	{
+		vhsEffect = camera.GetComponent<VHSEffect> ();
+		uiManager = GetComponent<UIManager> ();
 		//Get a component reference to ShowPanels attached to this object, store in showPanels variable
-		showPanels = GetComponent<ShowPanels> ();
+		//showPanels = GetComponent<ShowPanels> ();
 		//Get a component reference to StartButton attached to this object, store in startScript variable
-		startScript = GetComponent<StartOptions> ();
+		//startScript = GetComponent<StartOptions> ();
 	}
 
 	// Update is called once per frame
@@ -39,11 +44,15 @@ public class Pause : MonoBehaviour {
 	public void DoPause()
 	{
 		//Set isPaused to true
+		uiManager.isPaused = true;
+		//vhsEffect.isPaused = true;
 		isPaused = true;
-		//Set time.timescale to 0, this will cause animations and physics to stop updating
+
+
 		Time.timeScale = 0;
+
 		//call the ShowPausePanel function of the ShowPanels script
-		showPanels.ShowPausePanel ();
+		//.ShowPausePanel ();
 	}
 
 
@@ -51,10 +60,12 @@ public class Pause : MonoBehaviour {
 	{
 		//Set isPaused to false
 		isPaused = false;
+		uiManager.isPaused = false;
+		vhsEffect.isPaused = false;
 		//Set time.timescale to 1, this will cause animations and physics to continue updating at regular speed
 		Time.timeScale = 1;
 		//call the HidePausePanel function of the ShowPanels script
-		showPanels.HidePausePanel ();
+		//showPanels.HidePausePanel ();
 	}
 
 

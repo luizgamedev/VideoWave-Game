@@ -19,6 +19,9 @@ public class AudioManager : Singleton<AudioManager> {
 	[SerializeField]
 	AudioSource m_audioSourceFX;
 
+	[SerializeField]
+	AudioSource m_audioSourceDeathPitch;
+
 	public List<AudioDescription> m_gameAudios;
 
 	private Dictionary<string, AudioClip> m_audioClipDictionary = new Dictionary<string, AudioClip>();
@@ -77,5 +80,27 @@ public class AudioManager : Singleton<AudioManager> {
 			default:
 				break;
 		}
+	}
+
+	public void SetDeathPitch(float pitch)
+	{
+		if(!m_audioSourceDeathPitch.isPlaying)
+		{
+			m_audioSourceDeathPitch.clip = m_audioClipDictionary["DeathPitchSound"];
+			m_audioSourceDeathPitch.Play();
+		}
+
+		m_audioSourceDeathPitch.pitch = 3 / pitch;
+	}
+
+	public void ClearDeathPitch()
+	{
+		m_audioSourceDeathPitch.Stop();
+	}
+
+	public void ClearOtherFX()
+	{
+		m_audioSourceFX.Stop();
+		m_audioSourceDeathPitch.Stop();
 	}
 }

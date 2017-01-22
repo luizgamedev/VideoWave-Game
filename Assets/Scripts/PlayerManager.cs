@@ -20,6 +20,10 @@ public class PlayerManager : Singleton<PlayerManager> {
 
 	public float m_lastOnScreenPositionY = 0f;
 
+	float m_deathAcumulatedTime = 0f;
+
+	public float m_deathIdleTime = 3f;
+
 	bool m_isRunning = false;
 	bool m_playerIsDead = false;
 
@@ -93,10 +97,28 @@ public class PlayerManager : Singleton<PlayerManager> {
 				Vector3 worldPos = m_mainCamera.ScreenToWorldPoint(new Vector3(touchPos.x, touchPos.y, 20f));
 				worldPos.z = m_ZFeedbackDepth;
 
-				m_lastOnScreenPositionY = m_mainCamera.ScreenToWorldPoint(new Vector3(touchPos.x, touchPos.y, 40f)).y;
+				float newPositionY = m_mainCamera.ScreenToWorldPoint(new Vector3(touchPos.x, touchPos.y, 40f)).y;
 
 				m_playerFeedback.transform.position = new Vector3( CameraBehaviour.Instance.m_cameraLineReference.transform.position.x - 5f, 
 																   worldPos.y, worldPos.z);
+
+				if(m_lastOnScreenPositionY == newPositionY)
+				{
+					m_deathAcumulatedTime += Time.deltaTime;
+					if(m_deathAcumulatedTime > m_deathIdleTime)
+					{
+						OnPlayerDie();
+					}
+					else
+					{
+						AudioManager.Instance.SetDeathPitch(m_deathAcumulatedTime);
+					}
+				}
+				else
+				{
+					m_lastOnScreenPositionY = newPositionY;
+					AudioManager.Instance.ClearDeathPitch();
+				}
 
 			}
 		}
@@ -115,11 +137,29 @@ public class PlayerManager : Singleton<PlayerManager> {
 					Vector3 worldPos = m_mainCamera.ScreenToWorldPoint(new Vector3(touchPos.x, touchPos.y, 20f));
 					worldPos.z = m_ZFeedbackDepth;
 
-					m_lastOnScreenPositionY = m_mainCamera.ScreenToWorldPoint(new Vector3(touchPos.x, touchPos.y, 40f)).y;
+					float newPositionY = m_mainCamera.ScreenToWorldPoint(new Vector3(touchPos.x, touchPos.y, 40f)).y;
 
 					m_playerFeedback.transform.position = new Vector3( CameraBehaviour.Instance.m_cameraLineReference.transform.position.x - 5f, 
 																   worldPos.y, worldPos.z);
-				}
+
+				    if(m_lastOnScreenPositionY == newPositionY)
+					{
+						m_deathAcumulatedTime += Time.deltaTime;
+						if(m_deathAcumulatedTime > m_deathIdleTime)
+						{
+							OnPlayerDie();
+						}
+						else
+						{
+							AudioManager.Instance.SetDeathPitch(m_deathAcumulatedTime);
+						}
+					}
+					else
+					{
+						m_lastOnScreenPositionY = newPositionY;
+						AudioManager.Instance.m_audioSourceDeathPitch();
+					}
+						
 				break;
 			}
         }
@@ -132,15 +172,26 @@ public class PlayerManager : Singleton<PlayerManager> {
 				pos.x = m_mainCamera.transform.position.x + m_XThreshhold;
 				m_playerFeedback.transform.position = pos;
 			}
+
+			m_deathAcumulatedTime += Time.deltaTime;
+			if(m_deathAcumulatedTime > m_deathIdleTime)
+			{
+				OnPlayerDie();
+			}
+			else
+			{
+				AudioManager.Instance.ClearDeathPitch();
+			}
 		}
 
 	}
 
 	public void OnPlayerDie()
 	{
-		m_playerIsDead = true;
-		AudioManager.Instance.PlayFx("DeathSound");
 		GameEventManager.TriggerGamePause();
-
+		m_playerIsDead = true;
+		m_deathAcumulatedTime = 0f;
+		AudioManager.Instance.ClearOtherFX();
+		AudioManager.Instance.PlayFx("DeathSound");
 	}
 }
