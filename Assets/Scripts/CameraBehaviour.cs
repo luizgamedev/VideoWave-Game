@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using BitStrap;
 
-public class CameraBehaviour : MonoBehaviour {
+public class CameraBehaviour : Singleton<CameraBehaviour> {
 
 	public float m_XStep = 1f;
+
+	public Transform m_cameraLeftReference;
+	public Transform m_cameraRightReference;
 
 	// Use this for initialization
 	void Start () {

@@ -38,10 +38,12 @@ public class LineDotObjectPool : ObjectPool
 	{
 		LineDot lineDot = m_poolOfObjects[m_poolIndex].GetComponent<LineDot>();
 
-		base.ReleaseObject();
-
 		//Debug Line
-		m_poolOfObjects[m_poolIndex].transform.localPosition = new Vector3(m_initialLocalX, Random.Range(-15, 15f), m_initialLocalZ);
+		m_poolOfObjects[m_poolIndex].transform.position = new Vector3(CameraBehaviour.Instance.m_cameraRightReference.transform.position.x, 
+																		   PlayerManager.Instance.m_lastOnScreenPositionY, 
+																		   m_initialLocalZ);
+
+		base.ReleaseObject();
 
 		LineRendererManager.Instance.UpdateDots(lineDot.transform.position, true);
 

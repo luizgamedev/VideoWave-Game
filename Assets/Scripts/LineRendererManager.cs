@@ -14,8 +14,8 @@ public class LineRendererManager : Singleton<LineRendererManager>
 	void Start()
 	{
 		m_lineRenderer = GetComponent<LineRenderer>();
-		m_lineRenderer.startWidth = m_initialWidth;
-		m_lineRenderer.endWidth = m_initialWidth;
+		// m_lineRenderer.startWidth = m_initialWidth;
+		// m_lineRenderer.endWidth = m_initialWidth;
 		
 	}
 
@@ -34,7 +34,7 @@ public class LineRendererManager : Singleton<LineRendererManager>
 
 	public void DrawLines(){
 		Vector3[] positions = m_dotsQueue.ToArray();
-		for(int i = 0 ; i < 100 ; i++)
+		for(int i = 0 ; i < 50 ; i++)
 		{
 			if(i < m_dotsQueue.Count)
 			{

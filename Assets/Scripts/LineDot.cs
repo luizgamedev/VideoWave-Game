@@ -6,8 +6,6 @@ public class LineDot : MonoBehaviour {
 
 	LineDotObjectPool m_lineObjectPool = null;
 
-    public float m_XThreshhold = 500f;
-
     private Camera m_mainCamera;
 
 	public void SetObjectPool(LineDotObjectPool _objPool)
@@ -23,7 +21,7 @@ public class LineDot : MonoBehaviour {
 
     void Update()
     {
-        if(m_mainCamera.transform.position.x - transform.localPosition.x > m_XThreshhold)
+        if(transform.position.x < CameraBehaviour.Instance.m_cameraLeftReference.transform.position.x)
         {
             m_lineObjectPool.DeactivateObject(gameObject);
         }
