@@ -28,10 +28,19 @@ public class ObjectPool : MonoBehaviour {
 	public virtual void Start()
 	{
 		m_mainCam = Camera.main;
+		GameEventManager.GameStart += OnStart;
+		OnStart();
+	}
+
+	void OnStart()
+	{
+		m_poolIndex = 0;
+
 		foreach(GameObject obj in m_poolOfObjects)
 		{
 			obj.transform.SetParent(m_mainCam.transform);
 			obj.transform.localPosition = new Vector3(CameraBehaviour.Instance.m_cameraRightReference.transform.localPosition.x, 0f, m_relativeCameraPositionZ);
+			obj.SetActive(false);
 		}
 	}
 

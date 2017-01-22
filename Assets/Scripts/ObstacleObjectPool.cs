@@ -31,7 +31,20 @@ public class ObstacleObjectPool : ObjectPool {
 		m_minY = CameraBehaviour.Instance.m_cameraBottomReference.transform.position.y;
 		m_maxY = CameraBehaviour.Instance.m_cameraTopReference.transform.position.y;
 
+		GameEventManager.GameStart += OnStart;
+		GameEventManager.GamePause += OnPause;
+
+		OnStart();
+	}
+
+	void OnStart()
+	{
 		m_obstacleCoroutine = StartCoroutine(SpawnObstacle());
+	}
+
+	void OnPause()
+	{
+		StopCoroutine(m_obstacleCoroutine);
 	}
 
 	IEnumerator SpawnObstacle()

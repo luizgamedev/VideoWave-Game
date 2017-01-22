@@ -14,6 +14,14 @@ public class LineRendererManager : Singleton<LineRendererManager>
 	void Start()
 	{
 		m_lineRenderer = GetComponent<LineRenderer>();
+		GameEventManager.GameStart += OnStart;
+		OnStart();
+	}
+
+	void OnStart()
+	{
+		m_dotsQueue.Clear();
+		DrawLines();
 	}
 
 	public void UpdateDots(Vector3 position, bool active)

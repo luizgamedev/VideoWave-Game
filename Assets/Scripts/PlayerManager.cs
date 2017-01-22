@@ -20,6 +20,9 @@ public class PlayerManager : Singleton<PlayerManager> {
 
 	public float m_lastOnScreenPositionY = 0f;
 
+	bool m_isRunning = false;
+	bool m_playerIsDead = false;
+
 	void Start()
 	{
 		m_mainCamera = Camera.main;
@@ -32,10 +35,51 @@ public class PlayerManager : Singleton<PlayerManager> {
 			m_playerFeedback.transform.position = pos;
 			m_ZFeedbackDepth = pos.z;
 		}
+		
+		GameEventManager.GameStart += OnStart;
+		GameEventManager.GamePause += OnPause;
+
+		OnStart();
+	}
+
+	void OnStart()
+	{
+		m_isRunning = true;
+		Time.timeScale = 1f;
+	}
+
+	void OnPause()
+	{
+		m_isRunning = false;
+		Time.timeScale = 0f;
 	}
 
 	void LateUpdate()
 	{
+		if(!m_isRunning)
+		{
+			if(m_playerIsDead)
+			{
+#if UNITY_EDITOR
+				if(Input.GetMouseButtonDown(0))
+				{
+					m_playerIsDead = false;
+					GameEventManager.TriggerGameStart();
+				}
+#elif UNITY_IOS
+				for (int i = 0; i < Input.touchCount; ++i) {
+					if (Input.GetTouch(i).phase == TouchPhase.Began)
+					{
+						m_playerIsDead = false;
+						GameEventManager.TriggerGameStart();
+						break;
+					}
+				}
+#endif
+			}
+			return;
+		}
+
 		bool inputWasDone = false;
 
 #if UNITY_EDITOR
@@ -51,7 +95,8 @@ public class PlayerManager : Singleton<PlayerManager> {
 
 				m_lastOnScreenPositionY = m_mainCamera.ScreenToWorldPoint(new Vector3(touchPos.x, touchPos.y, 40f)).y;
 
-				m_playerFeedback.transform.position = new Vector3( m_mainCamera.transform.position.x + m_XFixedPos, worldPos.y, worldPos.z);
+				m_playerFeedback.transform.position = new Vector3( CameraBehaviour.Instance.m_cameraLineReference.transform.position.x - 5f, 
+																   worldPos.y, worldPos.z);
 
 			}
 		}
@@ -72,7 +117,8 @@ public class PlayerManager : Singleton<PlayerManager> {
 
 					m_lastOnScreenPositionY = m_mainCamera.ScreenToWorldPoint(new Vector3(touchPos.x, touchPos.y, 40f)).y;
 
-					m_playerFeedback.transform.position = new Vector3( m_mainCamera.transform.position.x + m_XFixedPos, worldPos.y, worldPos.z);
+					m_playerFeedback.transform.position = new Vector3( CameraBehaviour.Instance.m_cameraLineReference.transform.position.x - 5f, 
+																   worldPos.y, worldPos.z);
 				}
 				break;
 			}
@@ -87,6 +133,14 @@ public class PlayerManager : Singleton<PlayerManager> {
 				m_playerFeedback.transform.position = pos;
 			}
 		}
+
+	}
+
+	public void OnPlayerDie()
+	{
+		m_playerIsDead = true;
+		AudioManager.Instance.PlayFx("DeathSound");
+		GameEventManager.TriggerGamePause();
 
 	}
 }

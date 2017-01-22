@@ -1,14 +1,19 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObstacleBehaviour : MonoBehaviour {
+public class BackgroundAssetBehaviour : MonoBehaviour {
 
 	public float m_rotationSpeed;
 
-	ObstacleObjectPool m_obstaclePool = null;
+	BackgroundAssetsObjectPool m_obstaclePool = null;
 
-	public void SetObjectPool(ObstacleObjectPool _objPool)
+	// Use this for initialization
+	void Start () {
+		
+	}
+
+	public void SetObjectPool(BackgroundAssetsObjectPool _objPool)
 	{
 		m_obstaclePool = _objPool;
 	}
@@ -22,19 +27,4 @@ public class ObstacleBehaviour : MonoBehaviour {
             m_obstaclePool.DeactivateObject(gameObject);
         }
 	}
-
-	void OnTriggerEnter(Collider other) {
-		LineDot dot = other.GetComponent<LineDot>();
-		if(dot != null)
-		{
-			gameObject.SetActive(false);
-			PlayerManager.Instance.OnPlayerDie();
-		}
-		
-
-		
-		
-    }
-
-	
 }

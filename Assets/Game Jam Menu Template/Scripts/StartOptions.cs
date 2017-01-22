@@ -84,7 +84,7 @@ public class StartOptions : MonoBehaviour {
 
 		//Load the selected scene, by scene index number in build settings
 		SceneManager.LoadScene (sceneToStart);
-		SceneManager.LoadScene( sceneToStart+1 , LoadSceneMode.Additive);
+		//SceneManager.LoadScene( sceneToStart+1 , LoadSceneMode.Additive);
 	}
 
 	public void HideDelayed()

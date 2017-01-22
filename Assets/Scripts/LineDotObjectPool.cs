@@ -9,6 +9,8 @@ public class LineDotObjectPool : ObjectPool
 
 	public float m_releaseDotsTime = 0.2f;
 
+	bool m_gameIsPaused = false;
+
 	public override void Start()
 	{
 
@@ -21,6 +23,18 @@ public class LineDotObjectPool : ObjectPool
 
 		base.Start();
 
+		GameEventManager.GameStart += OnStart;
+		GameEventManager.GamePause += OnPause;
+
+		OnStart();
+
+		
+	}
+
+	void OnStart()
+	{
+		m_gameIsPaused = false;
+
 		foreach(GameObject lineObj in m_poolOfObjects)
 		{
 			lineObj.GetComponent<LineDot>().SetLineActive(false);
@@ -29,9 +43,17 @@ public class LineDotObjectPool : ObjectPool
 		InvokeRepeating("DebugLines", 1f, m_releaseDotsTime );
 	}
 
+	void OnPause()
+	{
+		m_gameIsPaused = true;
+		CancelInvoke("DebugLines");
+	}
+
 	void DebugLines()
 	{
-		ReleaseObject();
+		if(!m_gameIsPaused){
+			ReleaseObject();
+		}
 	}
 
 	public override void ReleaseObject()

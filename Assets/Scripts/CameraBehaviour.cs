@@ -21,8 +21,18 @@ public class CameraBehaviour : Singleton<CameraBehaviour> {
 
 	public Transform m_cameraLineReference;
 
+	public Vector3 m_initPosition = Vector3.zero;
+
 	// Use this for initialization
 	void Start () {
+		m_initPosition = transform.position;
+		GameEventManager.GameStart += OnStart;
+		OnStart();
+	}
+
+	void OnStart()
+	{
+		transform.position = m_initPosition;
 		m_currentSpeed = m_XStep;
 	}
 	
