@@ -124,7 +124,8 @@ public class PlayerManager : Singleton<PlayerManager> {
 		}
 
 #elif UNITY_IOS
-		for (int i = 0; i < Input.touchCount; ++i) {
+		for (int i = 0; i < Input.touchCount; ++i) 
+		{
             if (Input.GetTouch(i).phase == TouchPhase.Began || 
 				Input.GetTouch(i).phase == TouchPhase.Moved || 
 				Input.GetTouch(i).phase == TouchPhase.Stationary)
@@ -157,10 +158,11 @@ public class PlayerManager : Singleton<PlayerManager> {
 					else
 					{
 						m_lastOnScreenPositionY = newPositionY;
-						AudioManager.Instance.m_audioSourceDeathPitch();
+						AudioManager.Instance.ClearDeathPitch();
 					}
 						
 				break;
+				}
 			}
         }
 #endif
@@ -183,7 +185,6 @@ public class PlayerManager : Singleton<PlayerManager> {
 				AudioManager.Instance.ClearDeathPitch();
 			}
 		}
-
 	}
 
 	public void OnPlayerDie()
