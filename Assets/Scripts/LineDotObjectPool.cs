@@ -39,7 +39,7 @@ public class LineDotObjectPool : ObjectPool
 		LineDot lineDot = m_poolOfObjects[m_poolIndex].GetComponent<LineDot>();
 
 		
-		m_poolOfObjects[m_poolIndex].transform.position = new Vector3(CameraBehaviour.Instance.m_cameraRightReference.transform.position.x, 
+		m_poolOfObjects[m_poolIndex].transform.position = new Vector3(CameraBehaviour.Instance.m_cameraLineReference.transform.position.x, 
 																		   PlayerManager.Instance.m_lastOnScreenPositionY, 
 																		   m_initialLocalZ);
 
