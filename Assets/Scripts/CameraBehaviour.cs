@@ -18,6 +18,6 @@ public class CameraBehaviour : Singleton<CameraBehaviour> {
 	// Update is called once per frame
 	void Update () 
 	{
-		transform.Translate(m_XStep, 0f, 0f);	
+		transform.Translate(m_XStep * Time.deltaTime, 0f, 0f);	
 	}
 }

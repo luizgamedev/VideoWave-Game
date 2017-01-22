@@ -39,7 +39,7 @@ public class ObjectPool : MonoBehaviour {
 		{
 			m_mainCam = Camera.main;
 			obj.transform.SetParent(m_mainCam.transform);
-			obj.transform.localPosition = new Vector3(m_relativeCameraPositionX, 0f, m_relativeCameraPositionZ);
+			obj.transform.localPosition = new Vector3(CameraBehaviour.Instance.m_cameraRightReference.transform.localPosition.x, 0f, m_relativeCameraPositionZ);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class ObjectPool : MonoBehaviour {
 	public virtual void DeactivateObject(GameObject gameObj)
 	{
 		gameObj.transform.SetParent(m_mainCam.transform);
-		gameObj.transform.localPosition = new Vector3(m_initialLocalX, 0f, m_initialLocalZ);
+		gameObj.transform.localPosition = new Vector3(CameraBehaviour.Instance.m_cameraRightReference.transform.localPosition.x, 0f, m_initialLocalZ);
 		gameObj.SetActive(false);
 	}
 
