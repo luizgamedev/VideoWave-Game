@@ -23,21 +23,13 @@ public class ObjectPool : MonoBehaviour {
 
 	protected int m_poolIndex = 0;
 
-	private float m_lastYposition = 0f;
-
-	private int m_numberOfPointAtSameSide = 1;
-
-	private bool m_positiveMove = true;
-
-	private float m_maxMove = 10f;
-
 	Camera m_mainCam;
 
 	public virtual void Start()
 	{
+		m_mainCam = Camera.main;
 		foreach(GameObject obj in m_poolOfObjects)
 		{
-			m_mainCam = Camera.main;
 			obj.transform.SetParent(m_mainCam.transform);
 			obj.transform.localPosition = new Vector3(CameraBehaviour.Instance.m_cameraRightReference.transform.localPosition.x, 0f, m_relativeCameraPositionZ);
 		}

@@ -6,12 +6,9 @@ public class LineDot : MonoBehaviour {
 
 	LineDotObjectPool m_lineObjectPool = null;
 
-    private Camera m_mainCamera;
-
 	public void SetObjectPool(LineDotObjectPool _objPool)
 	{
 		m_lineObjectPool = _objPool;
-        m_mainCamera = Camera.main;
 	}
 
 	public void SetLineActive(bool _active)

@@ -10,6 +10,10 @@ public class CameraBehaviour : Singleton<CameraBehaviour> {
 	public Transform m_cameraLeftReference;
 	public Transform m_cameraRightReference;
 
+	public Transform m_cameraTopReference;
+
+	public Transform m_cameraBottomReference;
+
 	// Use this for initialization
 	void Start () {
 		

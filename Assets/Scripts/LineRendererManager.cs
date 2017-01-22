@@ -14,9 +14,6 @@ public class LineRendererManager : Singleton<LineRendererManager>
 	void Start()
 	{
 		m_lineRenderer = GetComponent<LineRenderer>();
-		// m_lineRenderer.startWidth = m_initialWidth;
-		// m_lineRenderer.endWidth = m_initialWidth;
-		
 	}
 
 	public void UpdateDots(Vector3 position, bool active)

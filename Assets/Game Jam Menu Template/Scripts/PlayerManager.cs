@@ -31,8 +31,6 @@ public class PlayerManager : Singleton<PlayerManager> {
 			pos.x = m_mainCamera.transform.position.x + m_XThreshhold;
 			m_playerFeedback.transform.position = pos;
 			m_ZFeedbackDepth = pos.z;
-
-			Debug.Log(m_playerFeedback != null);
 		}
 	}
 
